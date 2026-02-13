@@ -14,7 +14,8 @@
  *   - Track: totalBatches, totalPlates, ordersProcessed
  *   - Skip orders that are not positive integers (0, negative, decimal, non-number)
  *
- * Validation:
+ * 
+  Validation:
  *   - Agar orders array nahi hai ya empty hai,
  *     return: { totalBatches: 0, totalPlates: 0, ordersProcessed: 0 }
  *
@@ -35,4 +36,30 @@
  */
 export function biryaniBatchProcessor(orders) {
   // Your code here
+  if (!Array.isArray(orders) || orders.length === 0) {
+    return { totalBatches: 0, totalPlates: 0, ordersProcessed: 0 };
+  }
+
+  let totalBatches = 0;
+  let totalPlates = 0;
+  let ordersProcessed = 0;
+
+  for (let i = 0; i < orders.length; i++) {
+    const plates = orders[i];
+    
+    if (typeof plates !== 'number' || plates <= 0 || !Number.isInteger(plates)) {
+      continue;
+    }
+    let remaining = plates;
+    do {
+      const batchSize = Math.min(remaining, 5);
+      totalBatches++;
+      remaining -= batchSize;
+    } while (remaining > 0);
+
+    totalPlates += plates;
+    ordersProcessed++;
+  }
+
+  return { totalBatches, totalPlates, ordersProcessed };
 }
